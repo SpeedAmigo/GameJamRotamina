@@ -7,7 +7,11 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private GameObject interactUI;
     [SerializeField] private float interactionDistance = 2f;
     
+    public Transform gunSocket;
+    public GunScript currentGun;
+    
     private IInteraction currentInteraction;
+    
 
     private void Start()
     {
@@ -16,6 +20,17 @@ public class PlayerScript : MonoBehaviour
     private void Update()
     { 
         ShootRaycast();
+
+        if (Input.GetKeyDown(KeyCode.G) && currentGun != null)
+        {
+            currentGun.DropGun();
+            currentGun = null;
+        }
+
+        if (Input.GetMouseButtonDown(0) && currentGun != null)
+        {
+            currentGun.Shoot();
+        }
     }
 
     private void ShootRaycast()
@@ -31,7 +46,7 @@ public class PlayerScript : MonoBehaviour
                 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    interaction.Interact();
+                    interaction.Interact(this);
                 }
             }
             else
