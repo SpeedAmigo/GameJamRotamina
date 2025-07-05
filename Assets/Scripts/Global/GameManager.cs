@@ -34,6 +34,23 @@ public class GameManager : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        // Test - zwiększaj killerCount klawiszem K
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            AddKillerCount(1);
+            Debug.Log($"Killer Count: {killerCount}");
+        }
+
+        // Reset klawiszem R
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            killerCount = 0;
+            Debug.Log("Killer Count reset to 0");
+        }
+    }
+
     public void ResetKillerCount()
     {
         killerCount = 0;
