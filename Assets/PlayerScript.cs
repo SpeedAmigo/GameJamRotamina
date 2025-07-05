@@ -20,13 +20,7 @@ public class PlayerScript : MonoBehaviour
     private void Update()
     { 
         ShootRaycast();
-
-        if (Input.GetKeyDown(KeyCode.G) && currentGun != null)
-        {
-            currentGun.DropGun();
-            currentGun = null;
-        }
-
+        
         if (Input.GetMouseButtonDown(0) && currentGun != null)
         {
             currentGun.Shoot();

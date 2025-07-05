@@ -6,11 +6,6 @@ public class GunScript : InteractionAbstract
     {
         Debug.Log("Shooting");
     }
-
-    public void DropGun()
-    {
-        transform.parent = null;
-    }
     
     public override void Interact(PlayerScript player)
     {
