@@ -26,7 +26,6 @@ public class PlayerScript : MonoBehaviour
             currentGun.Shoot();
         }
     }
-
     private void ShootRaycast()
     {
         Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
