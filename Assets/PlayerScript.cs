@@ -1,17 +1,21 @@
+using System;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
     [SerializeField] private Camera playerCamera;
-    [SerializeField] private float interactionDistance = 2f; 
+    [SerializeField] private GameObject interactUI;
+    [SerializeField] private float interactionDistance = 2f;
     
-    // Update is called once per frame
-    private void Update()
+    private IInteraction currentInteraction;
+
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            ShootRaycast();
-        }
+        interactUI.SetActive(false);
+    }
+    private void Update()
+    { 
+        ShootRaycast();
     }
 
     private void ShootRaycast()
@@ -22,8 +26,24 @@ public class PlayerScript : MonoBehaviour
         {
             if (hit.collider.TryGetComponent(out IInteraction interaction))
             {
-                interaction.Interact();
+                currentInteraction = interaction;
+                interactUI.SetActive(true);
+                
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    interaction.Interact();
+                }
             }
+            else
+            {
+                currentInteraction = null;
+                interactUI.SetActive(false);
+            }
+        }
+        else
+        {
+            currentInteraction = null;
+            interactUI.SetActive(false);
         }
     }
 }
