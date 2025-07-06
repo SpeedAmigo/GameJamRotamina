@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ProjectileScript : MonoBehaviour
+public class ProjectileScript2 : MonoBehaviour
 {
     [SerializeField] private float damageValue;
     
