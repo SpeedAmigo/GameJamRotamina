@@ -6,21 +6,21 @@ public class PlayerSanity : MonoBehaviour
 
     private void Start()
     {
-        // Subskrybuj do eventu GameManager
-        GameManager.OnSanityChangedWithMax += OnSanityChanged;
+        // Subskrybuj do eventu SanityManager
+        SanityManager.OnSanityChangedWithMax += OnSanityChanged;
 
         // Ustaw początkowe wartości UI
-        if (sanityUIScript != null && GameManager.Instance != null)
+        if (sanityUIScript != null && SanityManager.Instance != null)
         {
-            sanityUIScript.SetMaxValue(GameManager.Instance.GetMaxSanity());
-            sanityUIScript.SetCurrentValue(GameManager.Instance.GetCurrentSanity());
+            sanityUIScript.SetMaxValue(SanityManager.Instance.GetMaxSanity());
+            sanityUIScript.SetCurrentValue(SanityManager.Instance.GetCurrentSanity());
         }
     }
 
     private void OnDestroy()
     {
         // Odsubskrybuj event
-        GameManager.OnSanityChangedWithMax -= OnSanityChanged;
+        SanityManager.OnSanityChangedWithMax -= OnSanityChanged;
     }
 
     private void OnSanityChanged(float currentSanity, float maxSanity)
@@ -35,9 +35,9 @@ public class PlayerSanity : MonoBehaviour
     // Opcjonalnie - nadal możesz mieć Update dla spadania sanity w czasie
     private void Update()
     {
-        if (GameManager.Instance != null && GameManager.Instance.GetCurrentSanity() > 0)
+        if (SanityManager.Instance != null && SanityManager.Instance.GetCurrentSanity() > 0)
         {
-            GameManager.Instance.RemoveSanity(Time.deltaTime);
+            SanityManager.Instance.RemoveSanity(Time.deltaTime);
         }
     }
 }

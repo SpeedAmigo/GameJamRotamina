@@ -39,28 +39,28 @@ public class SaturationController : MonoBehaviour
         objectRenderer.material = saturationMaterial;
 
         // Subskrybuj do eventu sanity
-        GameManager.OnSanityChanged += OnSanityChanged;
+        SanityManager.OnSanityChanged += OnSanityChanged;
 
         // Ustaw początkową saturację na podstawie sanity
-        UpdateSaturation(GameManager.Instance?.GetCurrentSanity() ?? 0f);
+        UpdateSaturation(SanityManager.Instance?.GetCurrentSanity() ?? 0f);
     }
 
     private void OnEnable()
     {
         // Subskrybuj przy włączeniu obiektu
-        GameManager.OnSanityChanged += OnSanityChanged;
+        SanityManager.OnSanityChanged += OnSanityChanged;
     }
 
     private void OnDisable()
     {
         // Odsubskrybuj przy wyłączeniu obiektu
-        GameManager.OnSanityChanged -= OnSanityChanged;
+        SanityManager.OnSanityChanged -= OnSanityChanged;
     }
 
     private void OnDestroy()
     {
         // Odsubskrybuj przy niszczeniu obiektu
-        GameManager.OnSanityChanged -= OnSanityChanged;
+        SanityManager.OnSanityChanged -= OnSanityChanged;
 
         if (saturationMaterial != null)
         {
@@ -116,10 +116,10 @@ public class SaturationController : MonoBehaviour
 
     private void UpdateSaturation(float currentSanity)
     {
-        if (saturationMaterial == null || GameManager.Instance == null) return;
+        if (saturationMaterial == null || SanityManager.Instance == null) return;
 
         // Saturacja = currentSanity / maxSanity (0 = grayscale, 1 = full color)
-        float maxSanity = GameManager.Instance.GetMaxSanity();
+        float maxSanity = SanityManager.Instance.GetMaxSanity();
         float saturation = Mathf.Clamp01(currentSanity / maxSanity);
         saturationMaterial.SetFloat(SaturationProperty, saturation);
 
