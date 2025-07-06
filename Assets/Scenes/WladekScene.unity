@@ -974,6 +974,7 @@ GameObject:
   - component: {fileID: 2054747230}
   - component: {fileID: 2054747233}
   - component: {fileID: 2054747232}
+  - component: {fileID: 2054747234}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1037,6 +1038,20 @@ MonoBehaviour:
   maxSanity: 100
   currentSanity: 100
   killsPerPercentSanity: 2
+--- !u!114 &2054747234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054747229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67987fef771c744aa9f7e36665a23b2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  generateCodeOnStart: 1
+  showCodeInConsole: 1
 --- !u!1 &2124838211 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4459864851310106424, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
