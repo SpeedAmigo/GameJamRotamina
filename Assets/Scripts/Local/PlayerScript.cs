@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.XR;
-using Random = UnityEngine.Random;
 
 public class PlayerScript : MonoBehaviour, IDamageAble
 {
@@ -70,11 +65,11 @@ public class PlayerScript : MonoBehaviour, IDamageAble
         if (sanity >= 75)
             intensity = 0f;
         else if (sanity >= 50)
-            intensity = 0.25f;
+            intensity = 2f;
         else if (sanity >= 25)
-            intensity = 0.5f;
+            intensity = 5f;
         else
-            intensity = 1f;
+            intensity = 10f;
 
         Shake(intensity);
     }
