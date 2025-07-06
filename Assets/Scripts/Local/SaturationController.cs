@@ -72,7 +72,6 @@ public class SaturationController : MonoBehaviour
     private void OnSanityChanged(float currentSanity)
     {
         UpdateSaturation(currentSanity);
-        Debug.Log($"SaturationController on {gameObject.name} received sanity: {currentSanity}");
     }
 
     private Material FindSaturationMaterial()
@@ -124,6 +123,5 @@ public class SaturationController : MonoBehaviour
         float saturation = Mathf.Clamp01(currentSanity / maxSanity);
         saturationMaterial.SetFloat(SaturationProperty, saturation);
 
-        Debug.Log($"Updated saturation to: {saturation:F2} on {gameObject.name} (Sanity: {currentSanity:F1}/{maxSanity})");
     }
 }

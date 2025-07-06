@@ -48,7 +48,6 @@ public class GameManager : MonoBehaviour
 
         AddSanity(sanityBonus);
 
-        Debug.Log($"Added {sanityBonus:F1} sanity for {points} kills. Current: {currentSanity:F1}/{maxSanity}");
     }
 
     // Metody do kontrolowania sanity
@@ -60,7 +59,6 @@ public class GameManager : MonoBehaviour
         OnSanityChanged?.Invoke(currentSanity);
         OnSanityChangedWithMax?.Invoke(currentSanity, maxSanity);
 
-        Debug.Log($"Added {amount} sanity. Current: {currentSanity:F1}/{maxSanity}");
     }
 
     public void RemoveSanity(float amount)
@@ -71,7 +69,6 @@ public class GameManager : MonoBehaviour
         OnSanityChanged?.Invoke(currentSanity);
         OnSanityChangedWithMax?.Invoke(currentSanity, maxSanity);
 
-        Debug.Log($"Removed {amount} sanity. Current: {currentSanity:F1}/{maxSanity}");
     }
 
     public void SetSanity(float newSanity)
@@ -86,6 +83,32 @@ public class GameManager : MonoBehaviour
     public float GetCurrentSanity()
     {
         return currentSanity;
+    }
+
+    // Zwraca poziom sanity jako liczbę całkowitą od 0 do 4
+    // 0 - dokładnie 0% / 1 - 0.01-24.99% / 2 - 25-49.99% / 3 - 50-74.99% / 4 - 75-100%
+    public int GetSanityLevel()
+    {
+        float percentage = GetSanityPercentage();
+
+        if (percentage == 0f)
+            return 0; // Tylko dla dokładnie 0%
+        else if (percentage < 25f)
+            return 1; // 0.01% - 24.99%
+        else if (percentage < 50f)
+            return 2; // 25% - 49.99%
+        else if (percentage < 75f)
+            return 3; // 50% - 74.99%
+        else
+            return 4; // 75% - 100%
+    }
+
+    public float GetMaxSanityForActiveLevel()
+    {
+        float sanityLevel = GetSanityLevel();
+
+        return Mathf.Clamp(sanityLevel * 25f, 0f, maxSanity);
+
     }
 
     public float GetMaxSanity()
@@ -103,6 +126,24 @@ public class GameManager : MonoBehaviour
         killerCount = 0;
         OnKillerCountChanged?.Invoke(killerCount);
         Debug.Log("Killer Count reset to 0");
+    }
+
+    private void Update()
+    {
+        // Test: Zmniejszaj sanity co 10 sekund po wciśnięciu klawisza "Z", zwiększaj po "X"
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            Debug.Log($"Before sanity: {GetSanityPercentage()}");
+            RemoveSanity(10f);
+            Debug.Log($"After sanity: {GetSanityPercentage()}");
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            Debug.Log($"Before sanity: {GetSanityPercentage()}");
+            AddSanity(10f); // Testowo zwiększ sanity o 10
+            Debug.Log($"After sanity: {GetSanityPercentage()}");
+        }
+
     }
 
 
