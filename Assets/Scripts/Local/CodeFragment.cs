@@ -9,10 +9,20 @@ public class CodeFragment : InteractionAbstract
 
     [Header("Visual")]
     [SerializeField] private Color normalColor = Color.blue;
-    [SerializeField] private Color highlightColor = Color.yellow;
-    [SerializeField] private Color textColor = Color.white;
+
+    [SerializeField]
+    private Color[] pergaminColors = {
+    new Color(0.96f, 0.87f, 0.70f), // Pozycja 0 - jasny pergamin
+    new Color(0.93f, 0.84f, 0.65f), // Pozycja 1 - średni pergamin  
+    new Color(0.90f, 0.80f, 0.60f)  // Pozycja 2 - ciemny pergamin
+};
+    [SerializeField] private Color textColor = Color.black; // Czarny tekst
+    [SerializeField] private Color highlightColor = new Color(1f, 0.95f, 0.8f); // Jasny pergamin highlight
+
 
     private bool isCollected = false;
+
+
 
     // Components
     private TextMeshPro displayText;
@@ -37,34 +47,44 @@ public class CodeFragment : InteractionAbstract
     }
 
     private void CollectFragment()
+{
+    if (isCollected) return;
+
+    isCollected = true;
+
+    Debug.Log($"[CodeFragment] Collected fragment {position} with digit: {digitValue}");
+
+    // Powiadom CodeManager o zebraniu fragmentu
+    if (CodeManager.Instance != null)
     {
-        if (isCollected) return;
-
-        isCollected = true;
-
-        Debug.Log($"[CodeFragment] Collected fragment {position} with digit: {digitValue}");
-
-        // TODO: Powiadom UI Manager o zebraniu fragmentu
-        // if (CodeUIManager.Instance != null)
-        //     CodeUIManager.Instance.CollectFragment(position, digitValue);
-
-        // Ukryj fragment
-        gameObject.SetActive(false);
+        CodeManager.Instance.CollectFragment(position, digitValue);
     }
+    else
+    {
+        Debug.LogWarning("[CodeFragment] CodeManager not found!");
+    }
+
+    // Ukryj fragment
+    gameObject.SetActive(false);
+}
 
     private void UpdateDisplay()
     {
-        // Ustaw tekst
+        // Ustaw czarny tekst
         if (displayText != null)
         {
             displayText.text = digitValue.ToString();
             displayText.color = textColor;
         }
 
-        // Ustaw kolor tła
+        // Ustaw kolor pergaminu bazując na pozycji
         if (backgroundRenderer != null)
         {
-            backgroundRenderer.material.color = normalColor;
+            Color pergaminColor = position >= 0 && position < pergaminColors.Length
+                ? pergaminColors[position]
+                : pergaminColors[0];
+
+            backgroundRenderer.material.color = pergaminColor;
         }
     }
 
