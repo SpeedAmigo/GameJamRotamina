@@ -119,19 +119,19 @@ public class SanityLightBooster : MonoBehaviour
             return false;
         }
 
-        // Sprawdź czy sanity nie jest już na maksimum dla poziomu
+        // Sprawdź czy sanity nie jest już na maksimum (100%)
         float currentSanity = SanityManager.Instance.GetCurrentSanity();
-        float targetSanity = SanityManager.Instance.GetMaxSanityForActiveLevel();
+        float maxSanity = SanityManager.Instance.GetMaxSanity();
 
-        if (targetSanity <= currentSanity)
+        if (currentSanity >= maxSanity)
         {
             if (enableDebugLogs)
-                Debug.Log($"[SanityLightBooster] Cannot activate - sanity already at maximum for level ({currentSanity:F1}/{targetSanity:F1})");
+                Debug.Log($"[SanityLightBooster] Cannot activate - sanity already at maximum ({currentSanity:F1}/{maxSanity:F1})");
             return false;
         }
 
         if (enableDebugLogs)
-            Debug.Log($"[SanityLightBooster] Can activate boost! Current sanity: {currentSanity:F1}, Target: {targetSanity:F1}, Capacity: {remainingCapacity:F1}");
+            Debug.Log($"[SanityLightBooster] Can activate boost! Current sanity: {currentSanity:F1}, Max: {maxSanity:F1}, Capacity: {remainingCapacity:F1}");
 
         return true;
     }
@@ -169,12 +169,12 @@ public class SanityLightBooster : MonoBehaviour
 
         isActive = true;
 
-        // Pobierz obecny poziom i sanity
+        // Pobierz obecną sanity
         float startSanity = SanityManager.Instance.GetCurrentSanity();
-        float targetSanity = SanityManager.Instance.GetMaxSanityForActiveLevel();
+        float maxSanity = SanityManager.Instance.GetMaxSanity();
 
-        // Oblicz ile sanity faktycznie możemy dodać (ograniczone przez capacity)
-        float maxPossibleBoost = targetSanity - startSanity;
+        // Oblicz ile sanity faktycznie możemy dodać (ograniczone przez capacity i max sanity)
+        float maxPossibleBoost = maxSanity - startSanity;
         float actualBoost = Mathf.Min(maxPossibleBoost, remainingCapacity);
         float finalTargetSanity = startSanity + actualBoost;
 
@@ -205,6 +205,16 @@ public class SanityLightBooster : MonoBehaviour
                     Debug.Log($"[SanityLightBooster] Capacity limit reached! Using remaining: {capacityUsedThisFrame:F2}");
             }
 
+            // Sprawdź czy nie przekraczamy max sanity
+            if (newSanity > maxSanity)
+            {
+                capacityUsedThisFrame = maxSanity - lastSanity;
+                newSanity = maxSanity;
+
+                if (enableDebugLogs)
+                    Debug.Log($"[SanityLightBooster] Max sanity reached! Capping at: {maxSanity:F1}");
+            }
+
             // Ustaw nową sanity i zaktualizuj capacity
             SanityManager.Instance.SetSanity(newSanity);
             remainingCapacity -= capacityUsedThisFrame;
@@ -220,11 +230,18 @@ public class SanityLightBooster : MonoBehaviour
                 Debug.Log($"[SanityLightBooster] Progress {progress * 100:F0}%: Sanity {newSanity:F1} (+{usedCapacity:F1}), Capacity left: {remainingCapacity:F1}");
             }
 
-            // Sprawdź czy capacity się skończyła
+            // Sprawdź czy capacity się skończyła lub osiągnęliśmy max sanity
             if (remainingCapacity <= 0f)
             {
                 if (enableDebugLogs)
                     Debug.Log($"[SanityLightBooster] Boost capacity completely depleted! Total used: {usedCapacity:F1}");
+                break;
+            }
+
+            if (newSanity >= maxSanity)
+            {
+                if (enableDebugLogs)
+                    Debug.Log($"[SanityLightBooster] Max sanity reached! Stopping boost.");
                 break;
             }
 
@@ -235,7 +252,8 @@ public class SanityLightBooster : MonoBehaviour
         if (enableDebugLogs)
         {
             string reason = !playerInRange ? "player left area" :
-                           remainingCapacity <= 0f ? "capacity depleted" : "duration completed";
+                           remainingCapacity <= 0f ? "capacity depleted" :
+                           SanityManager.Instance.GetCurrentSanity() >= maxSanity ? "max sanity reached" : "duration completed";
             Debug.Log($"[SanityLightBooster] Boost ended ({reason}). Total capacity used: {usedCapacity:F1}, Remaining: {remainingCapacity:F1}/{boostCapacity:F1}");
             Debug.Log($"[SanityLightBooster] Final sanity: {SanityManager.Instance.GetCurrentSanity():F1} (Level {SanityManager.Instance.GetSanityLevel()})");
         }
@@ -246,7 +264,6 @@ public class SanityLightBooster : MonoBehaviour
         // Zaktualizuj wizualne efekty
         UpdateVisuals();
     }
-
     private void UpdateVisuals()
     {
         // Oblicz procent remaining capacity (0.0 - 1.0)
