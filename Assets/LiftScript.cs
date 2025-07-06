@@ -7,17 +7,31 @@ public class LiftScript : MonoBehaviour
     [SerializeField] private DOTweenAnimation leftDoorAnimation;
     [SerializeField] private DOTweenAnimation rightDoorAnimation;
 
+    [SerializeField] private string currentNumbers;
+
     [Button]
-    private void OpenDoors()
+    public void OpenDoors()
     {
         leftDoorAnimation.DOPlayForward();
         rightDoorAnimation.DOPlayForward();
     }
 
     [Button]
-    private void CloseDoors()
+    public void CloseDoors()
     {
         leftDoorAnimation.DOPlayBackwards();
         rightDoorAnimation.DOPlayBackwards();
+    }
+
+    public void AddNumber(int number)
+    {
+        Debug.Log(number);
+        
+        currentNumbers += number.ToString();
+    }
+
+    public void RemoveNumber()
+    {
+        
     }
 }
