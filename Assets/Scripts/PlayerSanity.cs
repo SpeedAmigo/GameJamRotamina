@@ -1,44 +1,43 @@
-using System;
 using UnityEngine;
 
 public class PlayerSanity : MonoBehaviour
 {
-    [SerializeField] private float currentSanity;
-    [SerializeField] private float maxSanity;
-    
     [SerializeField] private SanityUIScript sanityUIScript;
 
     private void Start()
     {
-        sanityUIScript.SetMaxValue(maxSanity);
+        // Subskrybuj do eventu GameManager
+        GameManager.OnSanityChangedWithMax += OnSanityChanged;
+
+        // Ustaw początkowe wartości UI
+        if (sanityUIScript != null && GameManager.Instance != null)
+        {
+            sanityUIScript.SetMaxValue(GameManager.Instance.GetMaxSanity());
+            sanityUIScript.SetCurrentValue(GameManager.Instance.GetCurrentSanity());
+        }
     }
 
-    private void Update()
+    private void OnDestroy()
     {
-        if (currentSanity > 0)
+        // Odsubskrybuj event
+        GameManager.OnSanityChangedWithMax -= OnSanityChanged;
+    }
+
+    private void OnSanityChanged(float currentSanity, float maxSanity)
+    {
+        if (sanityUIScript != null)
         {
-            currentSanity -= Time.deltaTime;
+            sanityUIScript.SetMaxValue(maxSanity);
             sanityUIScript.SetCurrentValue(currentSanity);
         }
     }
 
-    public float GetCurrentSanity()
+    // Opcjonalnie - nadal możesz mieć Update dla spadania sanity w czasie
+    private void Update()
     {
-        return currentSanity;
-    }
-
-    public float GetMaxSanity()
-    {
-        return maxSanity;
-    }
-
-    public void SetSanity(float newSanity)
-    {
-        currentSanity = newSanity > maxSanity ? maxSanity : newSanity;
-    }
-
-    public void SetMaxSanity(float newMaxSanity)
-    {
-        maxSanity = newMaxSanity;
+        if (GameManager.Instance != null && GameManager.Instance.GetCurrentSanity() > 0)
+        {
+            GameManager.Instance.RemoveSanity(Time.deltaTime);
+        }
     }
 }
