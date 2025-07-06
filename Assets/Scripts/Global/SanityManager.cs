@@ -46,6 +46,11 @@ public class SanityManager : MonoBehaviour
 
         OnSanityChanged?.Invoke(currentSanity);
         OnSanityChangedWithMax?.Invoke(currentSanity, maxSanity);
+
+        if (currentSanity <= 0)
+        {
+            Debug.Log("Died");
+        }
     }
 
     public void SetSanity(float newSanity)

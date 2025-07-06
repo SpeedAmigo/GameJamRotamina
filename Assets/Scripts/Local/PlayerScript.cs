@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class PlayerScript : MonoBehaviour
+public class PlayerScript : MonoBehaviour, IDamageAble
 {
     [SerializeField] private Camera playerCamera;
     [SerializeField] private GameObject interactUI;
@@ -53,5 +53,10 @@ public class PlayerScript : MonoBehaviour
             currentInteraction = null;
             interactUI.SetActive(false);
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        SanityManager.Instance.RemoveSanity(damage);
     }
 }
