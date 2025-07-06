@@ -25,7 +25,7 @@ public class GunScript : InteractionAbstract
         {
             Debug.Log(hit.collider.name);
             
-            if (hit.collider.TryGetComponent(out IDamageAble damageAble))
+            if (hit.collider.TryGetComponent(out SpiritScript damageAble))
             {
                 damageAble.TakeDamage(damage);
             }

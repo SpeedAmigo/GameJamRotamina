@@ -3,7 +3,7 @@ using RaycastPro.Detectors;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class SpiritScript : MonoBehaviour, IDamageAble
+public class SpiritScript : MonoBehaviour
 {
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Transform target;
@@ -31,6 +31,7 @@ public class SpiritScript : MonoBehaviour, IDamageAble
     private HashSet<Collider> detections;
     private float velocity;
     private float shootTimer;
+    private bool isAlive = true;
     
     private void Start()
     {
@@ -48,7 +49,7 @@ public class SpiritScript : MonoBehaviour, IDamageAble
         
         animator.SetFloat("Velocity", velocity);
         
-        if (detections.Count > 0  && target != null)
+        if (detections.Count > 0  && target != null && isAlive)
         {
             float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
@@ -123,6 +124,8 @@ public class SpiritScript : MonoBehaviour, IDamageAble
     
     private void Roam()
     {
+        if (!isAlive) return;
+        
         roamTimer -= Time.deltaTime;
 
         if (roamTimer <= 0f)
@@ -148,6 +151,9 @@ public class SpiritScript : MonoBehaviour, IDamageAble
     public void TakeDamage(int damage)
     {
         health -= damage;
+        
+        Debug.Log($"{gameObject.name} took {damage} damage. Remaining health: {health - damage}");
+
 
         if (health <= 0)
         {
@@ -158,8 +164,9 @@ public class SpiritScript : MonoBehaviour, IDamageAble
     private void Die()
     {
         agent.enabled = false;
-        GetComponent<Collider>().enabled = false;
+        isAlive = false;
+        
         dieParticle.SetActive(true);
-        Destroy(gameObject, 0.2f);
+        Destroy(gameObject, 1f);
     }
 }

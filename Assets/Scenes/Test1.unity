@@ -747,7 +747,7 @@ GameObject:
   - component: {fileID: 451874474}
   - component: {fileID: 451874475}
   - component: {fileID: 451874476}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Spirit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -819,8 +819,8 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!136 &451874476
-CapsuleCollider:
+--- !u!65 &451874476
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -829,7 +829,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -837,11 +837,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1.92
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.43, z: 0}
+  serializedVersion: 3
+  m_Size: {x: 1.05, y: 1.72, z: 0.49}
+  m_Center: {x: 0, y: 1.43, z: -0}
 --- !u!1 &523854891
 GameObject:
   m_ObjectHideFlags: 0
@@ -1659,7 +1657,7 @@ Transform:
   m_GameObject: {fileID: 945918825}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 1.68, z: 0.37}
+  m_LocalPosition: {x: -0.001, y: 1.68, z: 0.767}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2378,7 +2376,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1922904861}
   - component: {fileID: 1922904862}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Sight Detector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
