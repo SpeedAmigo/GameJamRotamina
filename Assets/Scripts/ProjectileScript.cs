@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ProjectileScript : MonoBehaviour
 {
-    [SerializeField] private float damageValue;
+    [SerializeField] private int damageValue;
     
     [SerializeField] private GameObject projectile;
     [SerializeField] private GameObject projectileEnd;

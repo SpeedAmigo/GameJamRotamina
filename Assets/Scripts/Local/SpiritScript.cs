@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using RaycastPro.Detectors;
-using RaycastPro.RaySensors;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class SpiritScript : MonoBehaviour
+public class SpiritScript : MonoBehaviour, IDamageAble
 {
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Transform target;
@@ -21,6 +19,10 @@ public class SpiritScript : MonoBehaviour
     [SerializeField] private float roamRadius = 10f;
     [SerializeField] private float roamInterval = 5f;
 
+    [SerializeField] private int health;
+
+    [SerializeField] private GameObject dieParticle;
+
     private float roamTimer;
     private Vector3 startPosition;
     
@@ -35,6 +37,7 @@ public class SpiritScript : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         startPosition = transform.position;
         roamTimer = roamInterval;
+        dieParticle.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -140,5 +143,23 @@ public class SpiritScript : MonoBehaviour
     public void RemoveTargetRef()
     {
         target = null;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        agent.enabled = false;
+        GetComponent<Collider>().enabled = false;
+        dieParticle.SetActive(true);
+        Destroy(gameObject, 0.2f);
     }
 }
