@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -6,15 +5,10 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [Header("Game State")]
-    public int killerCount = 0;
     public bool isGamePaused = false;
-
-    // Event który wywołuje się gdy killerCount się zmienia
-    public static event Action<int> OnKillerCountChanged;
 
     private void Awake()
     {
-        // Zapewnij, że jest tylko jedna instancja
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -22,40 +16,30 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject); // Przetrwa między scenami
+        DontDestroyOnLoad(gameObject);
     }
 
-    // Metody do zmiany stanu
-    public void AddKillerCount(int points)
+    // Metody do zarządzania stanem gry
+    public void PauseGame()
     {
-        killerCount += points;
-
-        OnKillerCountChanged?.Invoke(killerCount);
-
+        isGamePaused = true;
+        Time.timeScale = 0f;
     }
 
-    private void Update()
+    public void ResumeGame()
     {
-        // Test - zwiększaj killerCount klawiszem K
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            AddKillerCount(1);
-            Debug.Log($"Killer Count: {killerCount}");
-        }
-
-        // Reset klawiszem R
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            ResetKillerCount();
-        }
+        isGamePaused = false;
+        Time.timeScale = 1f;
     }
 
-    public void ResetKillerCount()
+    public void TogglePause()
     {
-        killerCount = 0;
-        OnKillerCountChanged?.Invoke(killerCount);
-        Debug.Log("Killer Count reset to 0");
-
-
+        if (isGamePaused)
+            ResumeGame();
+        else
+            PauseGame();
     }
+
+    // Gettery
+    public bool IsGamePaused() => isGamePaused;
 }
