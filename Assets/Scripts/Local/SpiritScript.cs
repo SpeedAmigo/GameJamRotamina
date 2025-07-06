@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using RaycastPro.Detectors;
-using RaycastPro.RaySensors;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -21,6 +19,10 @@ public class SpiritScript : MonoBehaviour
     [SerializeField] private float roamRadius = 10f;
     [SerializeField] private float roamInterval = 5f;
 
+    [SerializeField] private int health;
+
+    [SerializeField] private GameObject dieParticle;
+
     private float roamTimer;
     private Vector3 startPosition;
     
@@ -29,12 +31,14 @@ public class SpiritScript : MonoBehaviour
     private HashSet<Collider> detections;
     private float velocity;
     private float shootTimer;
+    private bool isAlive = true;
     
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         startPosition = transform.position;
         roamTimer = roamInterval;
+        dieParticle.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -45,7 +49,7 @@ public class SpiritScript : MonoBehaviour
         
         animator.SetFloat("Velocity", velocity);
         
-        if (detections.Count > 0  && target != null)
+        if (detections.Count > 0  && target != null && isAlive)
         {
             float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
@@ -120,6 +124,8 @@ public class SpiritScript : MonoBehaviour
     
     private void Roam()
     {
+        if (!isAlive) return;
+        
         roamTimer -= Time.deltaTime;
 
         if (roamTimer <= 0f)
@@ -140,5 +146,27 @@ public class SpiritScript : MonoBehaviour
     public void RemoveTargetRef()
     {
         target = null;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        
+        Debug.Log($"{gameObject.name} took {damage} damage. Remaining health: {health - damage}");
+
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        agent.enabled = false;
+        isAlive = false;
+        
+        dieParticle.SetActive(true);
+        Destroy(gameObject, 1f);
     }
 }
