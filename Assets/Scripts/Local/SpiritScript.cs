@@ -17,6 +17,13 @@ public class SpiritScript : MonoBehaviour
     [SerializeField] private float shootCooldown = 2f;
     [SerializeField] private float shootForce = 15f;
     
+    [Header("Roaming Settings")]
+    [SerializeField] private float roamRadius = 10f;
+    [SerializeField] private float roamInterval = 5f;
+
+    private float roamTimer;
+    private Vector3 startPosition;
+    
     [SerializeField] private Animator animator;
 
     private HashSet<Collider> detections;
@@ -26,6 +33,8 @@ public class SpiritScript : MonoBehaviour
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        startPosition = transform.position;
+        roamTimer = roamInterval;
     }
 
     private void Update()
@@ -38,7 +47,25 @@ public class SpiritScript : MonoBehaviour
         
         if (detections.Count > 0  && target != null)
         {
-            agent.SetDestination(target.position);
+            float distanceToTarget = Vector3.Distance(transform.position, target.position);
+
+            if (distanceToTarget > agent.stoppingDistance)
+            {
+                agent.SetDestination(target.position);
+            }
+            else
+            {
+                agent.ResetPath(); // Stop moving
+                FaceTarget();      // Face the player before shooting
+
+                shootTimer -= Time.deltaTime;
+
+                if (shootTimer <= 0f)
+                {
+                    ShootProjectile();
+                    shootTimer = shootCooldown;
+                }
+            }
             
             shootTimer -= Time.deltaTime;
             
@@ -47,7 +74,20 @@ public class SpiritScript : MonoBehaviour
                 ShootProjectile();
                 shootTimer = shootCooldown;
             }
+            
         }
+        else
+        {
+            Roam();
+        }
+    }
+    
+    private void FaceTarget()
+    {
+        Vector3 direction = (target.position - transform.position).normalized;
+        direction.y = 0f; // Keep rotation flat on the Y axis
+        if (direction != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(direction);
     }
     
     private void ShootProjectile()
@@ -75,6 +115,25 @@ public class SpiritScript : MonoBehaviour
             {
                 target = player.transform;
             }
+        }
+    }
+    
+    private void Roam()
+    {
+        roamTimer -= Time.deltaTime;
+
+        if (roamTimer <= 0f)
+        {
+            Vector3 randomDirection = Random.insideUnitSphere * roamRadius;
+            randomDirection += startPosition;
+
+            NavMeshHit navHit;
+            if (NavMesh.SamplePosition(randomDirection, out navHit, roamRadius, NavMesh.AllAreas))
+            {
+                agent.SetDestination(navHit.position);
+            }
+
+            roamTimer = roamInterval;
         }
     }
 
