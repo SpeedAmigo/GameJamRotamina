@@ -46,8 +46,7 @@ public class GameManager : MonoBehaviour
         // Reset klawiszem R
         if (Input.GetKeyDown(KeyCode.R))
         {
-            killerCount = 0;
-            Debug.Log("Killer Count reset to 0");
+            ResetKillerCount();
         }
     }
 
@@ -55,6 +54,8 @@ public class GameManager : MonoBehaviour
     {
         killerCount = 0;
         OnKillerCountChanged?.Invoke(killerCount);
+        Debug.Log("Killer Count reset to 0");
+
 
     }
 }
