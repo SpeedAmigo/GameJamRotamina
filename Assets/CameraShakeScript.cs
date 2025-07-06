@@ -8,7 +8,6 @@ public class CameraShakeScript : MonoBehaviour
     private float verticalRotation = 0f;
     private float horizontalRotation = 0f;
     
-
     private void Update()
     {
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
