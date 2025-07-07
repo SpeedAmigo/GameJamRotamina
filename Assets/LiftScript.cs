@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using TMPro;
@@ -12,6 +13,8 @@ public class LiftScript : MonoBehaviour
 
     [SerializeField] private string currentNumbers;
     [SerializeField] private TMP_InputField inputField;
+
+    public static Action OnGameOver;
 
     private string codeNumber;
 
@@ -51,6 +54,11 @@ public class LiftScript : MonoBehaviour
     {
         if (inputField.text.Length <= 0) return;
         inputField.text = inputField.text.Remove(inputField.text.Length - 1);
+    }
+
+    public void GameOver()
+    {
+        OnGameOver?.Invoke();
     }
 
     public void CheckCode()
