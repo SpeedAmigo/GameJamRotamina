@@ -71,11 +71,11 @@ public class PlayerScript : MonoBehaviour, IDamageAble
         if (sanity >= 75)
             intensity = 0f;
         else if (sanity >= 50)
-            intensity = 2f;
+            intensity = 0.5f;
         else if (sanity >= 25)
-            intensity = 5f;
+            intensity = 0.8f;
         else
-            intensity = 10f;
+            intensity = 1f;
 
         Shake(intensity);
     }
@@ -84,7 +84,7 @@ public class PlayerScript : MonoBehaviour, IDamageAble
     {
         if (intensity <= 0f) return;
 
-        playerCamera.transform.DOShakeRotation(0.2f, intensity);
+        playerCamera.transform.DOShakeRotation(0.2f, intensity, 10);
     }
 
     public void TakeDamage(int damage)
