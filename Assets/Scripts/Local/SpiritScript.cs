@@ -20,6 +20,10 @@ public class SpiritScript : MonoBehaviour
     [SerializeField] private float roamInterval = 5f;
 
     [SerializeField] private int health;
+    
+    [SerializeField] private FMODUnity.EventReference soundEvent;
+    [SerializeField] private float soundIntervalMin = 3f;
+    [SerializeField] private float soundIntervalMax = 6f;
 
     [SerializeField] private GameObject dieParticle;
 
@@ -33,12 +37,15 @@ public class SpiritScript : MonoBehaviour
     private float shootTimer;
     private bool isAlive = true;
     
+    private float soundTimer;
+    
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         startPosition = transform.position;
         roamTimer = roamInterval;
         dieParticle.gameObject.SetActive(false);
+        soundTimer = Random.Range(soundIntervalMin, soundIntervalMax);
     }
 
     private void Update()
@@ -140,6 +147,16 @@ public class SpiritScript : MonoBehaviour
             }
 
             roamTimer = roamInterval;
+        }
+        
+        if (isAlive)
+        {
+            soundTimer -= Time.deltaTime;
+            if (soundTimer <= 0f)
+            {
+                FMODUnity.RuntimeManager.PlayOneShot(soundEvent, transform.position);
+                soundTimer = Random.Range(soundIntervalMin, soundIntervalMax);
+            }
         }
     }
 

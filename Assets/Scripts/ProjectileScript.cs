@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 
 public class ProjectileScript : MonoBehaviour
@@ -6,6 +7,13 @@ public class ProjectileScript : MonoBehaviour
     
     [SerializeField] private GameObject projectile;
     [SerializeField] private GameObject projectileEnd;
+    
+    [SerializeField] private FMODUnity.EventReference fireEvent;
+
+    private void Start()
+    {
+        RuntimeManager.PlayOneShot(fireEvent, transform.position);
+    }
     
     private void OnCollisionEnter(Collision collision)
     {

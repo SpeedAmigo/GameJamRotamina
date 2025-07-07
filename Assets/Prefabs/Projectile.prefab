@@ -154,6 +154,13 @@ MonoBehaviour:
   damageValue: 10
   projectile: {fileID: 3841675083778705826}
   projectileEnd: {fileID: 4987498680511839253}
+  fireEvent:
+    Guid:
+      Data1: -1044304624
+      Data2: 1109755576
+      Data3: 1920737188
+      Data4: -1369475341
+    Path: event:/Projectile
 --- !u!1001 &1992884849963098036
 PrefabInstance:
   m_ObjectHideFlags: 0

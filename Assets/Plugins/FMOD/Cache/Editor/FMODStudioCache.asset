@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: SoundProject/Build/Desktop/Master.bank
   Name: Build/Desktop/Master
   StudioPath: bank:/Master
-  lastModified: 638874870469162934
+  lastModified: 638874904966460416
   FileSizes: []
   Exists: 1
 --- !u!114 &-8760147420505845400
@@ -72,6 +72,87 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 49000
+--- !u!114 &-8263805713468466807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Projectile
+  m_EditorClassIdentifier: 
+  Path: event:/Projectile
+  Guid:
+    Data1: -1044304624
+    Data2: 1109755576
+    Data3: 1920737188
+    Data4: -1369475341
+  Banks:
+  - {fileID: 4533536808098966355}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 3693
+--- !u!114 &-8133343597827640479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SpiritSounds
+  m_EditorClassIdentifier: 
+  Path: event:/SpiritSounds
+  Guid:
+    Data1: 279174924
+    Data2: 1210894926
+    Data3: 1644069306
+    Data4: 549031642
+  Banks:
+  - {fileID: 4533536808098966355}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 7170
+--- !u!114 &-6391863747315179446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GunShots
+  m_EditorClassIdentifier: 
+  Path: event:/GunShots
+  Guid:
+    Data1: -901383691
+    Data2: 1184486267
+    Data3: -1933076318
+    Data4: -1389620362
+  Banks:
+  - {fileID: 4533536808098966355}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2933
 --- !u!114 &-6264444873376613455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,7 +168,7 @@ MonoBehaviour:
   Path: SoundProject/Build/Desktop/Ambience.bank
   Name: Build/Desktop/Ambience
   StudioPath: bank:/Ambience
-  lastModified: 638874870469152923
+  lastModified: 638874888779596071
   FileSizes: []
   Exists: 1
 --- !u!114 &-5431145883532590107
@@ -157,7 +238,7 @@ MonoBehaviour:
   Path: SoundProject/Build/Desktop/Music.bank
   Name: Build/Desktop/Music
   StudioPath: bank:/Music
-  lastModified: 638874870469233331
+  lastModified: 638874888788917396
   FileSizes: []
   Exists: 1
 --- !u!114 &-83779667406526072
@@ -175,10 +256,10 @@ MonoBehaviour:
   Path: SoundProject/Build/Desktop/Master.strings.bank
   Name: Build/Desktop/Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638874870469162934
+  lastModified: 638874904966475459
   FileSizes:
   - Name: 
-    Value: 1784
+    Value: 1918
   Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -209,13 +290,16 @@ MonoBehaviour:
   - {fileID: 6979249492472476528}
   - {fileID: -8760147420505845400}
   - {fileID: 607639318369363843}
+  - {fileID: -8263805713468466807}
+  - {fileID: -6391863747315179446}
+  - {fileID: -8133343597827640479}
   EditorParameters: []
   MasterBanks:
   - {fileID: -8952699030259835631}
   StringsBanks:
   - {fileID: -83779667406526072}
   cacheVersion: 131848
-  cacheTime: 638874870469389560
+  cacheTime: 638874904967840168
   SerializableEventsDict:
   - key: event:/AmbTavern
     index: 0
@@ -237,6 +321,12 @@ MonoBehaviour:
     index: 8
   - key: event:/GhostSounds
     index: 9
+  - key: event:/Projectile
+    index: 10
+  - key: event:/GunShots
+    index: 11
+  - key: event:/SpiritSounds
+    index: 12
 --- !u!114 &607639318369363843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,7 +369,7 @@ MonoBehaviour:
   Path: SoundProject/Build/Desktop/SFX.bank
   Name: Build/Desktop/SFX
   StudioPath: bank:/SFX
-  lastModified: 638874870469389560
+  lastModified: 638874904967840168
   FileSizes: []
   Exists: 1
 --- !u!114 &4980290998478239961
