@@ -9,6 +9,8 @@ public class GunScript : InteractionAbstract
     [SerializeField] private float distance;
     [SerializeField] private int damage;
     [SerializeField] private float reloadTime = 2f;
+    
+    [SerializeField] private FMODUnity.EventReference shootSoundEvent;
 
     private bool isReloading = false;
 
@@ -44,6 +46,8 @@ public class GunScript : InteractionAbstract
             // Strzel
             animator.SetTrigger("Shoot");
             particle.SetActive(true);
+            
+            FMODUnity.RuntimeManager.PlayOneShot(shootSoundEvent, transform.position);
 
             Ray ray = new Ray(rayStart.transform.position, rayStart.transform.forward);
 
