@@ -19,6 +19,8 @@ public class CodeFragmentSpawner : MonoBehaviour
         {
             SpawnFragments();
         }
+
+        CodeManager.OnCodeReset += SpawnFragments;
     }
 
     // Rozrzuć fragmenty po poziomie
@@ -115,16 +117,6 @@ public class CodeFragmentSpawner : MonoBehaviour
                 Destroy(fragment);
         }
         spawnedFragments.Clear();
-    }
-
-    // Debug - respawn fragmentów
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R) && enableDebugLogs)
-        {
-            Debug.Log("[CodeFragmentSpawner] Respawning fragments...");
-            SpawnFragments();
-        }
     }
 
     // Gizmos do pokazania spawn points
