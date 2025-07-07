@@ -16,7 +16,7 @@ public class SanityLightBooster : MonoBehaviour
     private Coroutine boostCoroutine;
 
     // Auto-znajdowane komponenty
-    private Light lightComponent;
+    [SerializeField] private Light lightComponent;
     private Renderer rendererComponent;
     private float originalLightIntensity;
     private float originalLightRange;
@@ -24,8 +24,6 @@ public class SanityLightBooster : MonoBehaviour
 
     private void Start()
     {
-        // Znajdź Light i Renderer na tym samym obiekcie
-        lightComponent = GetComponentInChildren<Light>();
         rendererComponent = GetComponent<Renderer>();
 
         Debug.Log($"Light Component {lightComponent}");

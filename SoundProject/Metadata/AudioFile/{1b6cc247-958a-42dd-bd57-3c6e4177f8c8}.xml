@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{1b6cc247-958a-42dd-bd57-3c6e4177f8c8}">
+		<property name="assetPath">
+			<value>SpiritSounds/death is your only escape.mp3</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>4.3102040816326532</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{87f757b2-8203-4067-bc68-0ad435ad85fc}</destination>
+		</relationship>
+	</object>
+</objects>

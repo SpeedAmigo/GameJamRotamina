@@ -5,6 +5,8 @@ public class SanityManager : MonoBehaviour
 {
     public static SanityManager Instance { get; private set; }
 
+    [SerializeField] private GameObject deathCanvas;
+
     [Header("Sanity Configuration")]
     [SerializeField] private float maxSanity = 100f;
     [SerializeField] private float currentSanity = 100f;
@@ -49,7 +51,10 @@ public class SanityManager : MonoBehaviour
 
         if (currentSanity <= 0)
         {
-            Debug.Log("Died");
+            deathCanvas.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            Time.timeScale = 0f;
         }
     }
 

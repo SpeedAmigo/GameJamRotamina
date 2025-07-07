@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class LiftScript : MonoBehaviour
 {
+    public bool startLift;
+    
     [SerializeField] private DOTweenAnimation leftDoorAnimation;
     [SerializeField] private DOTweenAnimation rightDoorAnimation;
 
@@ -15,6 +17,11 @@ public class LiftScript : MonoBehaviour
 
     private void Start()
     {
+        if (startLift)
+        {
+            OpenDoors();
+        }
+        
         codeNumber = CodeManager.Instance.GetCode();
         Debug.Log(codeNumber);
     }
@@ -35,6 +42,7 @@ public class LiftScript : MonoBehaviour
 
     public void AddNumber(int number)
     {
+        if (startLift) return;
         if (inputField.text.Length >= 3) return;
         inputField.text += number.ToString();
     }
@@ -47,6 +55,7 @@ public class LiftScript : MonoBehaviour
 
     public void CheckCode()
     {
+        if (startLift) return;
         if (inputField.text == codeNumber)
         {
             OpenDoors();
