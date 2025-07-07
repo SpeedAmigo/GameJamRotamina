@@ -155,17 +155,28 @@ public class CodeFragmentSpawner : MonoBehaviour
     // Narysuj podgląd prefaba
     private void DrawPrefabPreview(Transform spawnPoint, bool isUsed)
     {
-        // Sprawdź czy prefab ma MeshRenderer
+        // Sprawdź czy prefab ma główny MeshRenderer
         MeshRenderer prefabRenderer = fragmentPrefab.GetComponent<MeshRenderer>();
         MeshFilter prefabMeshFilter = fragmentPrefab.GetComponent<MeshFilter>();
 
+        // Sprawdź dziecko "background"
+        Transform backgroundChild = fragmentPrefab.transform.Find("background");
+        MeshRenderer backgroundRenderer = null;
+        MeshFilter backgroundMeshFilter = null;
+
+        if (backgroundChild != null)
+        {
+            backgroundRenderer = backgroundChild.GetComponent<MeshRenderer>();
+            backgroundMeshFilter = backgroundChild.GetComponent<MeshFilter>();
+        }
+
+        // Ustaw kolor podglądu
+        Color previewColor = isUsed ? new Color(0, 1, 1, 0.15f) : new Color(0, 0, 1, 0.1f); // Cyan/Niebieski z opacity
+        Gizmos.color = previewColor;
+
+        // Narysuj główny mesh jeśli istnieje
         if (prefabRenderer != null && prefabMeshFilter != null && prefabMeshFilter.sharedMesh != null)
         {
-            // Ustaw przezroczystość i kolor
-            Color previewColor = isUsed ? new Color(0, 1, 1, 0.15f) : new Color(0, 0, 1, 0.1f); // Cyan/Niebieski z opacity
-            Gizmos.color = previewColor;
-
-            // Narysuj mesh prefaba
             Gizmos.DrawMesh(
                 prefabMeshFilter.sharedMesh,
                 spawnPoint.position,
@@ -173,12 +184,37 @@ public class CodeFragmentSpawner : MonoBehaviour
                 fragmentPrefab.transform.localScale
             );
         }
-        else
+
+        // Narysuj background mesh jeśli istnieje
+        if (backgroundRenderer != null && backgroundMeshFilter != null && backgroundMeshFilter.sharedMesh != null)
+        {
+            // Oblicz pozycję dziecka względem parenta
+            Vector3 childLocalPos = backgroundChild.localPosition;
+            Quaternion childLocalRot = backgroundChild.localRotation;
+            Vector3 childLocalScale = Vector3.Scale(backgroundChild.localScale, fragmentPrefab.transform.localScale);
+
+            // Przekształć lokalne współrzędne dziecka na światowe względem spawn pointu
+            Vector3 worldChildPos = spawnPoint.position + spawnPoint.rotation * childLocalPos;
+            Quaternion worldChildRot = spawnPoint.rotation * childLocalRot;
+
+            // Zmień kolor dla background (nieco ciemniejszy)
+            Gizmos.color = new Color(previewColor.r * 0.7f, previewColor.g * 0.7f, previewColor.b * 0.7f, previewColor.a * 1.2f);
+
+            Gizmos.DrawMesh(
+                backgroundMeshFilter.sharedMesh,
+                worldChildPos,
+                worldChildRot,
+                childLocalScale
+            );
+        }
+
+        // Fallback jeśli nie ma żadnego mesh
+        if ((prefabRenderer == null || prefabMeshFilter == null) &&
+            (backgroundRenderer == null || backgroundMeshFilter == null))
         {
             // Fallback - narysuj prosty cylinder dla fragmentu kodu
             Gizmos.color = new Color(0, 1, 1, 0.1f); // Cyan z opacity
 
-            // Cylinder reprezentuje fragment kodu
             Matrix4x4 oldMatrix = Gizmos.matrix;
             Gizmos.matrix = Matrix4x4.TRS(spawnPoint.position, spawnPoint.rotation, Vector3.one);
 

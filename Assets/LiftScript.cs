@@ -6,7 +6,7 @@ using UnityEngine;
 public class LiftScript : MonoBehaviour
 {
     public bool startLift;
-    
+
     [SerializeField] private DOTweenAnimation leftDoorAnimation;
     [SerializeField] private DOTweenAnimation rightDoorAnimation;
 
@@ -21,11 +21,20 @@ public class LiftScript : MonoBehaviour
         {
             OpenDoors();
         }
-        
+        CodeManager.OnCodeReset += OnCodeReset;
+
         codeNumber = CodeManager.Instance.GetCode();
         Debug.Log(codeNumber);
     }
-    
+
+    private void OnCodeReset()
+    {
+        codeNumber = CodeManager.Instance.GetCode();
+        Debug.Log($"[LiftScript] Code reset. New code: {codeNumber}");
+        inputField.text = ""; // Reset input field
+    }
+
+
     [Button]
     public void OpenDoors()
     {
@@ -59,7 +68,7 @@ public class LiftScript : MonoBehaviour
         if (inputField.text == codeNumber)
         {
             OpenDoors();
-            inputField.text = "_";
+            inputField.text = "";
         }
     }
 }
