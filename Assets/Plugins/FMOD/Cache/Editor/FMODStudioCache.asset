@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: SoundProject/Build/Desktop/Master.bank
   Name: Build/Desktop/Master
   StudioPath: bank:/Master
-  lastModified: 638874849312151785
+  lastModified: 638874859882989399
   FileSizes: []
   Exists: 1
 --- !u!114 &-8760147420505845400
@@ -87,7 +87,7 @@ MonoBehaviour:
   Path: SoundProject/Build/Desktop/Ambience.bank
   Name: Build/Desktop/Ambience
   StudioPath: bank:/Ambience
-  lastModified: 638874837672146827
+  lastModified: 638874859882979354
   FileSizes: []
   Exists: 1
 --- !u!114 &-5431145883532590107
@@ -157,7 +157,7 @@ MonoBehaviour:
   Path: SoundProject/Build/Desktop/Music.bank
   Name: Build/Desktop/Music
   StudioPath: bank:/Music
-  lastModified: 638874812641861431
+  lastModified: 638874859883059422
   FileSizes: []
   Exists: 1
 --- !u!114 &-83779667406526072
@@ -175,7 +175,7 @@ MonoBehaviour:
   Path: SoundProject/Build/Desktop/Master.strings.bank
   Name: Build/Desktop/Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638874849312151785
+  lastModified: 638874859882989399
   FileSizes:
   - Name: 
     Value: 1784
@@ -215,7 +215,7 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: -83779667406526072}
   cacheVersion: 131848
-  cacheTime: 638874855191883427
+  cacheTime: 638874859883209606
   SerializableEventsDict:
   - key: event:/AmbTavern
     index: 0
@@ -279,7 +279,7 @@ MonoBehaviour:
   Path: SoundProject/Build/Desktop/SFX.bank
   Name: Build/Desktop/SFX
   StudioPath: bank:/SFX
-  lastModified: 638874855191883427
+  lastModified: 638874859883209606
   FileSizes: []
   Exists: 1
 --- !u!114 &4980290998478239961
