@@ -119,7 +119,7 @@ public class CodeFragmentSpawner : MonoBehaviour
         spawnedFragments.Clear();
     }
 
-    // Gizmos do pokazania spawn points
+    // W CodeFragmentSpawner.cs - zmodyfikuj OnDrawGizmos():
     private void OnDrawGizmos()
     {
         if (spawnPoints != null)
@@ -128,17 +128,119 @@ public class CodeFragmentSpawner : MonoBehaviour
             {
                 if (spawnPoints[i] != null)
                 {
-                    Gizmos.color = Color.cyan;
-                    Gizmos.DrawWireSphere(spawnPoints[i].position, 1f);
-                    Gizmos.color = Color.white;
+                    Transform spawnPoint = spawnPoints[i];
+
+                    // Różne kolory dla używanych i nieużywanych spawn points
+                    bool isUsed = IsSpawnPointUsed(i);
+                    Gizmos.color = isUsed ? Color.cyan : Color.blue;
+                    Gizmos.DrawWireSphere(spawnPoint.position, 1f);
+
+                    // Narysuj podgląd prefaba z opacity
+                    if (fragmentPrefab != null)
+                    {
+                        DrawPrefabPreview(spawnPoint, isUsed);
+                    }
 
                     // Numer spawn point w Scene view
 #if UNITY_EDITOR
-                    UnityEditor.Handles.Label(spawnPoints[i].position + Vector3.up * 2, $"Spawn {i}");
+                    UnityEditor.Handles.Label(spawnPoint.position + Vector3.up * 2f, $"Fragment {i}");
 #endif
+
+                    Gizmos.color = Color.white;
                 }
             }
         }
+    }
+
+    // Narysuj podgląd prefaba
+    private void DrawPrefabPreview(Transform spawnPoint, bool isUsed)
+    {
+        // Sprawdź czy prefab ma główny MeshRenderer
+        MeshRenderer prefabRenderer = fragmentPrefab.GetComponent<MeshRenderer>();
+        MeshFilter prefabMeshFilter = fragmentPrefab.GetComponent<MeshFilter>();
+
+        // Sprawdź dziecko "background"
+        Transform backgroundChild = fragmentPrefab.transform.Find("background");
+        MeshRenderer backgroundRenderer = null;
+        MeshFilter backgroundMeshFilter = null;
+
+        if (backgroundChild != null)
+        {
+            backgroundRenderer = backgroundChild.GetComponent<MeshRenderer>();
+            backgroundMeshFilter = backgroundChild.GetComponent<MeshFilter>();
+        }
+
+        // Ustaw kolor podglądu
+        Color previewColor = isUsed ? new Color(0, 1, 1, 0.15f) : new Color(0, 0, 1, 0.1f); // Cyan/Niebieski z opacity
+        Gizmos.color = previewColor;
+
+        // Narysuj główny mesh jeśli istnieje
+        if (prefabRenderer != null && prefabMeshFilter != null && prefabMeshFilter.sharedMesh != null)
+        {
+            Gizmos.DrawMesh(
+                prefabMeshFilter.sharedMesh,
+                spawnPoint.position,
+                spawnPoint.rotation,
+                fragmentPrefab.transform.localScale
+            );
+        }
+
+        // Narysuj background mesh jeśli istnieje
+        if (backgroundRenderer != null && backgroundMeshFilter != null && backgroundMeshFilter.sharedMesh != null)
+        {
+            // Oblicz pozycję dziecka względem parenta
+            Vector3 childLocalPos = backgroundChild.localPosition;
+            Quaternion childLocalRot = backgroundChild.localRotation;
+            Vector3 childLocalScale = Vector3.Scale(backgroundChild.localScale, fragmentPrefab.transform.localScale);
+
+            // Przekształć lokalne współrzędne dziecka na światowe względem spawn pointu
+            Vector3 worldChildPos = spawnPoint.position + spawnPoint.rotation * childLocalPos;
+            Quaternion worldChildRot = spawnPoint.rotation * childLocalRot;
+
+            // Zmień kolor dla background (nieco ciemniejszy)
+            Gizmos.color = new Color(previewColor.r * 0.7f, previewColor.g * 0.7f, previewColor.b * 0.7f, previewColor.a * 1.2f);
+
+            Gizmos.DrawMesh(
+                backgroundMeshFilter.sharedMesh,
+                worldChildPos,
+                worldChildRot,
+                childLocalScale
+            );
+        }
+
+        // Fallback jeśli nie ma żadnego mesh
+        if ((prefabRenderer == null || prefabMeshFilter == null) &&
+            (backgroundRenderer == null || backgroundMeshFilter == null))
+        {
+            // Fallback - narysuj prosty cylinder dla fragmentu kodu
+            Gizmos.color = new Color(0, 1, 1, 0.1f); // Cyan z opacity
+
+            Matrix4x4 oldMatrix = Gizmos.matrix;
+            Gizmos.matrix = Matrix4x4.TRS(spawnPoint.position, spawnPoint.rotation, Vector3.one);
+
+            // Narysuj cylindryczny kształt
+            Gizmos.DrawCube(Vector3.zero, new Vector3(0.5f, 1f, 0.5f));
+
+            Gizmos.matrix = oldMatrix;
+        }
+    }
+
+    // Sprawdź czy spawn point jest aktualnie używany
+    private bool IsSpawnPointUsed(int spawnIndex)
+    {
+        foreach (GameObject fragment in spawnedFragments)
+        {
+            if (fragment != null)
+            {
+                // Sprawdź czy fragment jest blisko tego spawn pointu
+                float distance = Vector3.Distance(fragment.transform.position, spawnPoints[spawnIndex].position);
+                if (distance < 1.5f) // Tolerancja 1.5 metra (większa niż dla amunicji)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // Gettery

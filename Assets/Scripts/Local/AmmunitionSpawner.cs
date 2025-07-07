@@ -130,19 +130,75 @@ public class AmmunitionSpawner : MonoBehaviour
             {
                 if (spawnPoints[i] != null)
                 {
+                    Transform spawnPoint = spawnPoints[i];
+
                     // Różne kolory dla używanych i nieużywanych spawn points
-                    bool isUsed = spawnedAmmunition.Count > 0; // Można to ulepszyć żeby pokazywać aktualnie używane
+                    bool isUsed = IsSpawnPointUsed(i);
                     Gizmos.color = isUsed ? Color.green : Color.yellow;
-                    Gizmos.DrawWireSphere(spawnPoints[i].position, 0.5f);
-                    Gizmos.color = Color.white;
+                    Gizmos.DrawWireSphere(spawnPoint.position, 0.5f);
+
+                    // Narysuj podgląd prefaba z opacity
+                    if (ammunitionPrefab != null)
+                    {
+                        DrawPrefabPreview(spawnPoint, isUsed);
+                    }
 
                     // Numer spawn point w Scene view
 #if UNITY_EDITOR
-                    UnityEditor.Handles.Label(spawnPoints[i].position + Vector3.up * 1, $"Ammo {i}");
+                    UnityEditor.Handles.Label(spawnPoint.position + Vector3.up * 1.5f, $"Ammo {i}");
 #endif
+
+                    Gizmos.color = Color.white;
                 }
             }
         }
+    }
+
+    // Narysuj podgląd prefaba
+    private void DrawPrefabPreview(Transform spawnPoint, bool isUsed)
+    {
+        // Sprawdź czy prefab ma MeshRenderer
+        MeshRenderer prefabRenderer = ammunitionPrefab.GetComponent<MeshRenderer>();
+        MeshFilter prefabMeshFilter = ammunitionPrefab.GetComponent<MeshFilter>();
+
+        if (prefabRenderer != null && prefabMeshFilter != null && prefabMeshFilter.sharedMesh != null)
+        {
+            // Ustaw przezroczystość i kolor
+            Color previewColor = isUsed ? new Color(0, 1, 0, 0.1f) : new Color(1, 1, 0, 0.1f); // Zielony/Żółty z opacity 0.1
+            Gizmos.color = previewColor;
+
+            // Narysuj mesh prefaba
+            Gizmos.DrawMesh(
+                prefabMeshFilter.sharedMesh,
+                spawnPoint.position,
+                spawnPoint.rotation,
+                ammunitionPrefab.transform.localScale
+            );
+        }
+        else
+        {
+            // Fallback - narysuj prosty box jeśli nie ma mesh
+            Gizmos.color = new Color(1, 0, 1, 0.1f); // Różowy z opacity
+            Gizmos.DrawCube(spawnPoint.position, Vector3.one * 0.3f);
+        }
+    }
+
+    // Sprawdź czy spawn point jest aktualnie używany
+    private bool IsSpawnPointUsed(int spawnIndex)
+    {
+        foreach (GameObject ammo in spawnedAmmunition)
+        {
+            if (ammo != null)
+            {
+                // Sprawdź czy amunicja jest blisko tego spawn pointu
+                float distance = Vector3.Distance(ammo.transform.position, spawnPoints[spawnIndex].position);
+                if (distance < 1f) // Tolerancja 1 metr
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // Gettery

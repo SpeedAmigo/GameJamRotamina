@@ -29,7 +29,6 @@ public class SanityUIAnimationScript : MonoBehaviour
         else
             intensity = 10f;
 
-        Debug.Log($"[SanityUIAnimationScript] Camera shake intensity: {intensity} | Sanity: {sanity}");
 
         Shake(intensity);
     }
