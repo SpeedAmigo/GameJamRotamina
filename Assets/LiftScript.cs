@@ -2,7 +2,6 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class LiftScript : MonoBehaviour
 {
@@ -12,10 +11,14 @@ public class LiftScript : MonoBehaviour
     [SerializeField] private string currentNumbers;
     [SerializeField] private TMP_InputField inputField;
 
-    private int codeNumber = 123;
-    
-    
+    private string codeNumber;
 
+    private void Start()
+    {
+        codeNumber = CodeManager.Instance.GetCode();
+        Debug.Log(codeNumber);
+    }
+    
     [Button]
     public void OpenDoors()
     {
@@ -44,7 +47,7 @@ public class LiftScript : MonoBehaviour
 
     public void CheckCode()
     {
-        if (inputField.text == codeNumber.ToString())
+        if (inputField.text == codeNumber)
         {
             OpenDoors();
             inputField.text = "_";
