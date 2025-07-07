@@ -34,12 +34,9 @@ public class PlayerScript : MonoBehaviour, IDamageAble
 
         if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance))
         {
-            // Debug co trafiłeś
-            Debug.Log($"[PlayerScript] Raycast hit: {hit.collider.name}");
 
             if (hit.collider.TryGetComponent(out IInteraction interaction))
             {
-                Debug.Log($"[PlayerScript] Found interaction component: {interaction.GetType()}");
                 currentInteraction = interaction;
                 interactUI.SetActive(true);
 
@@ -51,7 +48,6 @@ public class PlayerScript : MonoBehaviour, IDamageAble
             }
             else
             {
-                Debug.Log("[PlayerScript] No interaction component found");
                 currentInteraction = null;
                 interactUI.SetActive(false);
             }
