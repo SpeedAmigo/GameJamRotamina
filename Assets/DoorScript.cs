@@ -1,29 +1,51 @@
 using System.Collections;
+using FMODUnity;
 using UnityEngine;
 
 public class DoorScript : InteractionAbstract
 {
     [SerializeField] private bool isRotating;
-    [SerializeField] private bool doorsOpened;
+    [SerializeField] private bool doorsOpened = false;
     [SerializeField] private float rotationSpeed;
+    
+    FMOD.Studio.EventInstance DoorsSound;
+    public EventReference DoorsEvent;
     
     public override void Interact(PlayerScript player)
     {
-        if (doorsOpened)
+        if (doorsOpened == true)
         {
             StartCoroutine(CloseOverTime());
-            //PlaySound();
+            PlaySound();
             doorsOpened = false;
             //RoomsSnap();
         }
         else
         {
             StartCoroutine(OpenOverTime());
-            //PlaySound();
+            PlaySound();
             doorsOpened = true;
             
             //RoomsSnap();
         }
+    }
+    
+    private void PlaySound()
+    {
+        DoorsSound = FMODUnity.RuntimeManager.CreateInstance(DoorsEvent);
+        DoorsSound.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject.transform));
+        
+        if (doorsOpened == true)
+        {            
+            DoorsSound.setParameterByNameWithLabel("doorParameter", "Close");
+        }
+        else
+        {
+            DoorsSound.setParameterByNameWithLabel("doorParameter", "Open");
+        }
+        
+        DoorsSound.start();
+        DoorsSound.release();
     }
     
     private IEnumerator CloseOverTime()
@@ -52,7 +74,7 @@ public class DoorScript : InteractionAbstract
         float elapsedTime = 0f;
         //roomEventClose?.Invoke();
         Quaternion startRotation = transform.rotation;
-        Quaternion targetRotation = Quaternion.Euler(0, -65, 0) * startRotation; // Rotating around Y-axis by 90 degrees
+        Quaternion targetRotation = Quaternion.Euler(0, -95, 0) * startRotation; // Rotating around Y-axis by 90 degrees
 
         while (elapsedTime < 1f) // Rotate over 1 second
         {

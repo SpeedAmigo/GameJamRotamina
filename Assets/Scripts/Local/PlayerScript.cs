@@ -8,6 +8,11 @@ public class PlayerScript : MonoBehaviour, IDamageAble
     [SerializeField] private float interactionDistance = 2f;
 
     [SerializeField] private float mouseSensitivity = 10f;
+    
+    [SerializeField] private FMODUnity.EventReference sanityEffectEvent;
+
+    private float sanitySoundTimer = 0f;
+    private float currentSanitySoundInterval = 5f;
 
     public Transform gunSocket;
     public GunScript currentGun;
@@ -21,6 +26,15 @@ public class PlayerScript : MonoBehaviour, IDamageAble
     {
         ShootRaycast();
         CameraShake();
+        
+        sanitySoundTimer += Time.deltaTime;
+        UpdateSanitySoundInterval(); // Calculate interval based on current sanity
+
+        if (sanitySoundTimer >= currentSanitySoundInterval)
+        {
+            FMODUnity.RuntimeManager.PlayOneShot(sanityEffectEvent, transform.position);
+            sanitySoundTimer = 0f;
+        }
 
 
         if (Input.GetMouseButtonDown(0) && currentGun != null)
@@ -85,6 +99,14 @@ public class PlayerScript : MonoBehaviour, IDamageAble
         if (intensity <= 0f) return;
 
         playerCamera.transform.DOShakeRotation(0.2f, intensity, 10);
+    }
+    
+    private void UpdateSanitySoundInterval()
+    {
+        float sanity = SanityManager.Instance.GetCurrentSanity();
+        // Map sanity (0–75) to interval (1s–10s)
+        float clamped = Mathf.Clamp(sanity, 0f, 75f);
+        currentSanitySoundInterval = Mathf.Lerp(2f, 10f, clamped / 75f);
     }
 
     public void TakeDamage(int damage)
