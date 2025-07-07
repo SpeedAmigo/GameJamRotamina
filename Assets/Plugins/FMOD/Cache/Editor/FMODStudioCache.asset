@@ -256,7 +256,7 @@ MonoBehaviour:
   Path: SoundProject/Build/Desktop/Master.strings.bank
   Name: Build/Desktop/Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638874904966475459
+  lastModified: 638874907833213973
   FileSizes:
   - Name: 
     Value: 1918
@@ -299,7 +299,7 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: -83779667406526072}
   cacheVersion: 131848
-  cacheTime: 638874904967840168
+  cacheTime: 638874907833379087
   SerializableEventsDict:
   - key: event:/AmbTavern
     index: 0
@@ -369,7 +369,7 @@ MonoBehaviour:
   Path: SoundProject/Build/Desktop/SFX.bank
   Name: Build/Desktop/SFX
   StudioPath: bank:/SFX
-  lastModified: 638874904967840168
+  lastModified: 638874907833379087
   FileSizes: []
   Exists: 1
 --- !u!114 &4980290998478239961

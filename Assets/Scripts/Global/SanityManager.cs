@@ -4,14 +4,14 @@ using UnityEngine;
 public class SanityManager : MonoBehaviour
 {
     public static SanityManager Instance { get; private set; }
-
-    [SerializeField] private GameObject deathCanvas;
-
+    
     [Header("Sanity Configuration")]
     [SerializeField] private float maxSanity = 100f;
     [SerializeField] private float currentSanity = 100f;
     [SerializeField] private int killsPerPercentSanity = 2; // Co ile killów = 1% sanity
 
+    public static Action<bool> OnDeath;
+    
     // Eventy
     public static event Action<float> OnSanityChanged; // Przekazuje currentSanity
     public static event Action<float, float> OnSanityChangedWithMax; // Przekazuje (current, max)
@@ -26,7 +26,7 @@ public class SanityManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
+        
         // Ustaw początkową sanity
         currentSanity = maxSanity;
     }
@@ -51,7 +51,8 @@ public class SanityManager : MonoBehaviour
 
         if (currentSanity <= 0)
         {
-            deathCanvas.SetActive(true);
+            OnDeath?.Invoke(true);
+            //deathCanvas.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             Time.timeScale = 0f;
@@ -94,7 +95,7 @@ public class SanityManager : MonoBehaviour
         float sanityLevel = GetSanityLevel();
         return Mathf.Clamp(sanityLevel * 25f, 0f, maxSanity);
     }
-
+    
     // Debug
     private void Update()
     {
